@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Orders & Payments Dashboard</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 20px; }
+        h1 { margin-bottom: 0.5rem; }
+        section { margin-bottom: 2rem; padding: 1rem; border: 1px solid #ddd; border-radius: 8px; }
+        label { display: inline-block; margin-right: 0.5rem; }
+        input { padding: 0.25rem 0.5rem; }
+        button { padding: 0.25rem 0.75rem; cursor: pointer; }
+        ul { list-style: none; padding-left: 0; }
+        li { padding: 0.25rem 0; border-bottom: 1px solid #eee; font-family: monospace; }
+        pre { background:#f5f5f5; padding:0.5rem; border-radius:4px; overflow:auto; }
+        .topbar { display:flex; gap:10px; align-items:center; margin-bottom: 12px; }
+        .muted { color:#666; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <button id="logout">Logout</button>
+        <button id="adminBtn" style="display:none;">Admin</button>
+        <span id="me" class="muted"></span>
+    </div>
+
+    <h1>Orders & Payments Dashboard</h1>
+
+    <section>
+        <h2>Create new order (via REST)</h2>
+        <label for="amount">Amount:</label>
+        <input id="amount" type="number" min="1" value="100" />
+        <button id="create">Create order</button>
+        <p><strong>Last created order:</strong></p>
+        <pre id="lastOrder">none</pre>
+    </section>
+
+    <section>
+        <h2>Live payment events (via Kafka → WebSocket)</h2>
+        <ul id="events"></ul>
+    </section>
+
+    <script>
+        const token = localStorage.getItem("token");
+        const GATEWAY = "http://localhost:8080";
+
+        if (!token) location.href = "/login.html";
+
+        const amountInput = document.getElementById("amount");
+        const createBtn = document.getElementById("create");
+        const lastOrderPre = document.getElementById("lastOrder");
+        const eventsUl = document.getElementById("events");
+
+        async function loadMe() {
+        const resp = await fetch(`${GATEWAY}/auth/me`, {
+            headers: { authorization: `Bearer ${token}` }
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok) {
+            localStorage.removeItem("token");
+            location.href = "/login.html";
+            return;
+        }
+
+        document.getElementById("me").textContent = `${data.user.email} (${data.user.role})`;
+        if (data.user.role === "admin") {
+            const b = document.getElementById("adminBtn");
+            b.style.display = "inline-block";
+            b.onclick = () => location.href = "/admin.html";
+        }
+        }
+
+        document.getElementById("logout").onclick = () => {
+        localStorage.removeItem("token");
+        location.href = "/login.html";
+        };
+
+        createBtn.onclick = async () => {
+        const amount = Number(amountInput.value || "0");
+        if (!amount || amount <= 0) {
+            alert("Amount must be > 0");
+            return;
+        }
+
+        createBtn.disabled = true;
+        try {
+            const resp = await fetch("/api/orders", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ amount }),
+            });
+            const data = await resp.json();
+            lastOrderPre.textContent = JSON.stringify(data, null, 2);
+        } catch (e) {
+            console.error(e);
+            alert("Error creating order");
+        } finally {
+            createBtn.disabled = false;
+        }
+        };
+
+        // websocket
+        const ws = new WebSocket(`ws://${location.host}/ws`);
+        ws.onopen = () => console.log("WS connected");
+        ws.onmessage = (ev) => {
+        const li = document.createElement("li");
+        li.textContent = ev.data;
+        eventsUl.prepend(li);
+        };
+        ws.onerror = (err) => console.error("WS error", err);
+
+        loadMe();
+    </script>
+</body>
+</html>

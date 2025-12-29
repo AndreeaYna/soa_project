@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Admin</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 20px; }
+        pre { background:#f5f5f5; padding:10px; border-radius:6px; overflow:auto; }
+        button { padding: 8px 12px; margin-right: 8px; cursor: pointer; }
+        .top { display:flex; gap:10px; align-items:center; margin-bottom: 12px; }
+        .muted { color:#666; }
+    </style>
+</head>
+<body>
+    <div class="top">
+        <button onclick="location.href='/'">← Dashboard</button>
+        <button id="logout">Logout</button>
+        <span id="me" class="muted"></span>
+    </div>
+
+    <h1>Admin panel</h1>
+    <button id="reload">Reload orders</button>
+
+    <h3>Orders</h3>
+    <pre id="out">-</pre>
+
+    <script>
+        const GATEWAY = "http://localhost:8080";
+        const token = localStorage.getItem("token");
+
+        if (!token) location.href = "/login.html";
+
+        async function api(path, options = {}) {
+        const resp = await fetch(`${GATEWAY}${path}`, {
+            ...options,
+            headers: {
+            ...(options.headers || {}),
+            authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await resp.json().catch(() => ({}));
+        return { resp, data };
+        }
+
+        async function loadMe() {
+        const { resp, data } = await api("/auth/me");
+        if (!resp.ok) return (location.href = "/login.html");
+        document.getElementById("me").textContent = `${data.user.email} (${data.user.role})`;
+
+        if (data.user.role !== "admin") {
+            document.getElementById("out").textContent = "forbidden (not admin)";
+            throw new Error("not admin");
+        }
+        }
+
+        async function loadOrders() {
+        const out = document.getElementById("out");
+        out.textContent = "loading...";
+        const { resp, data } = await api("/orders");
+        out.textContent = JSON.stringify(data, null, 2);
+        if (!resp.ok) console.warn("orders error:", data);
+        }
+
+        document.getElementById("reload").onclick = loadOrders;
+        document.getElementById("logout").onclick = () => {
+        localStorage.removeItem("token");
+        location.href = "/login.html";
+        };
+
+        (async () => {
+        await loadMe();
+        await loadOrders();
+        })();
+    </script>
+</body>
+</html>
