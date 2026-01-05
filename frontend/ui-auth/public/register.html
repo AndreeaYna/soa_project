@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Register · Subscription Hub</title>
+
+  <link rel="stylesheet" href="/ui-auth/styles.css" />
+</head>
+
+<body>
+  <main class="shell">
+    <section class="card">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <div class="title">Subscription Hub</div>
+          <div class="subtitle">Register</div>
+        </div>
+      </div>
+
+      <div id="errorBox" class="error" style="display:none;"></div>
+
+      <form id="registerForm" class="form" autocomplete="on">
+        <label class="label" for="email">Email</label>
+        <input id="email" type="email" class="input" required />
+
+        <label class="label" for="password">Password</label>
+        <input id="password" type="password" class="input" required />
+
+        <button class="btn" type="submit">Create account</button>
+
+        <div class="links">
+          <a href="/ui-auth/login.html">Do you already have an account? Login</a>
+          <a href="/">Back to the app</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/ui-auth/register.js"></script>
+</body>
+</html>

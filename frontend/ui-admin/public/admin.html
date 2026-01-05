@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin · Subscription Hub</title>
+  <link rel="stylesheet" href="/ui-admin/styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <button class="btn" id="logoutBtn" type="button">Logout</button>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-view="overview">Overview</button>
+      <button class="tab" data-view="users">Users</button>
+      <button class="tab" data-view="orders">Orders</button>
+      <button class="tab" data-view="payments">Payments</button>
+      <button class="tab" data-view="audit">Audit</button>
+    </nav>
+
+    <div class="userpill">
+      <div class="avatar" id="avatar">A</div>
+      <div class="userinfo">
+        <div class="name" id="name">admin</div>
+        <div class="role" id="role">admin</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1 id="pageTitle">Admin</h1>
+    </section>
+
+    <section class="view" id="view-overview">
+      <div class="grid">
+        <div class="card">
+          <h2>Status</h2>
+          <pre class="console" id="statusOut">{}</pre>
+        </div>
+
+        <div class="card">
+          <h2>Quick</h2>
+          <div class="row">
+            <button class="btn ghost" id="goUsersBtn" type="button">Open Users</button>
+            <button class="btn ghost" id="goOrdersBtn" type="button">Open Orders</button>
+            <button class="btn ghost" id="goAuditBtn" type="button">Open Audit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-users">
+      <div class="card">
+        <h2>Users</h2>
+
+        <div class="row">
+          <button class="btn" id="loadUsersBtn" type="button">Load</button>
+          <input class="input" id="usersFilter" placeholder="filter email..." />
+        </div>
+
+        <div class="tablewrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTbody">
+              <tr><td colspan="4" class="muted">No data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-orders">
+      <div class="card">
+        <h2>Orders</h2>
+
+        <div class="row">
+          <button class="btn" id="loadOrdersBtn" type="button">Load</button>
+          <input class="input" id="ordersLimit" placeholder="limit (ex: 50)" />
+        </div>
+
+        <div class="tablewrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>OrderId</th>
+                <th>User</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTbody">
+              <tr><td colspan="6" class="muted">No data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-payments">
+      <div class="card">
+        <h2>Payments (recent)</h2>
+
+        <div class="row">
+          <button class="btn" id="loadPaymentsBtn" type="button">Load</button>
+          <input class="input" id="paymentsLimit" placeholder="limit (ex: 50)" />
+        </div>
+
+        <pre class="console" id="paymentsOut">[]</pre>
+      </div>
+    </section>
+
+    <section class="view hidden" id="view-audit">
+      <div class="card">
+        <h2>Audit</h2>
+
+        <div class="row">
+          <button class="btn" id="loadAuditBtn" type="button">Load</button>
+          <input class="input" id="auditLimit" placeholder="limit (ex: 25)" />
+        </div>
+
+        <pre class="console" id="auditOut">{}</pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="/ui-admin/admin.js"></script>
+</body>
+</html>

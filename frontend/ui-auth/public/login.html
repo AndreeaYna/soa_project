@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login · Subscription Hub</title>
+
+  <!-- absolut, ca să fie sigur sub /ui-auth/ -->
+  <link rel="stylesheet" href="/ui-auth/styles.css" />
+</head>
+
+<body>
+  <main class="shell">
+    <section class="card">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <div class="title">Subscription Hub</div>
+          <div class="subtitle">Login</div>
+        </div>
+      </div>
+
+      <div id="errorBox" class="error" style="display:none;"></div>
+
+      <form id="loginForm" class="form" autocomplete="on">
+        <label class="label" for="email">Email</label>
+        <input id="email" type="email" class="input" required />
+
+        <label class="label" for="password">Password</label>
+        <input id="password" type="password" class="input" required />
+
+        <button class="btn" type="submit">Sign in</button>
+
+        <div class="links">
+          <a href="/ui-auth/register.html">Don't you have an account? Register</a>
+          <a href="/">Back to the app</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="/ui-auth/login.js"></script>
+</body>
+</html>

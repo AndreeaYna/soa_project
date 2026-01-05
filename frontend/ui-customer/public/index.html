@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Subscription Hub</title>
+  <link rel="stylesheet" href="/ui-customer/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="left-actions">
+        <button class="btn" id="btnLogout" style="display:none;">Logout</button>
+        <span class="badge err" id="wsBadge">
+          <span class="dot"></span>
+          <span id="wsText">WS: disconnected</span>
+        </span>
+      </div>
+
+      <div class="right-actions">
+        <span class="userchip">
+          <span class="avatar" id="avatar">U</span>
+          <span class="usertext">
+            <span class="useremail" id="userEmail">Not logged in</span>
+            <span class="userrole" id="userRole">guest</span>
+          </span>
+        </span>
+
+        <a class="btn" id="btnLogin" href="/ui-auth/login.html">Login</a>
+        <a class="btn" id="btnRegister" href="/ui-auth/register.html">Register</a>
+      </div>
+    </div>
+
+    <header class="header">
+      <h1>Subscription Hub</h1>
+      <p class="subtitle">
+        Microservices demo: you place a subscription (Orders), the payment is processed asynchronously (Payments), 
+        and the confirmation appears live (Kafka → Notifications → WebSocket).
+      </p>
+    </header>
+
+    <div id="alert" class="alert"></div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <section class="card">
+        <h2>Choose a plan</h2>
+        <p class="hint">Choose a subscription and click Subscribe. You will receive the confirmation live.</p>
+
+        <div class="planbox">
+          <label class="label">Plan</label>
+          <select id="planSelect" class="select">
+            <option value="spotify_premium" data-name="Spotify Premium" data-amount="9.99">Spotify Premium — 9.99 EUR / month</option>
+            <option value="netflix_standard" data-name="Netflix Standard" data-amount="12.99">Netflix Standard — 12.99 EUR / month</option>
+            <option value="yt_premium" data-name="YouTube Premium" data-amount="8.49">YouTube Premium — 8.49 EUR / month</option>
+          </select>
+
+          <div class="row">
+            <div class="price">
+              <span class="muted">Price</span>
+              <span class="big" id="priceLabel">9.99 EUR</span>
+            </div>
+            <button class="btn primary" id="btnSubscribe">Subscribe</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3 class="h3">Subscription status</h3>
+        <div class="statusline">
+          <span class="pill" id="subStatus">No active subscription</span>
+          <span class="muted" id="subPlan">—</span>
+        </div>
+
+        <div class="mini">
+          <div>
+            <div class="miniLabel">Last order</div>
+            <div class="miniValue" id="lastOrderNice">—</div>
+          </div>
+          <div>
+            <div class="miniLabel">Last payment</div>
+            <div class="miniValue" id="lastPaymentNice">—</div>
+          </div>
+        </div>
+
+        <details class="details">
+          <summary>Debug (raw)</summary>
+          <pre class="codebox" id="lastOrderRaw">{}</pre>
+        </details>
+      </section>
+
+      <!-- RIGHT -->
+      <section class="card">
+        <h2>Live payment feed</h2>
+        <p class="hint">Real-time events from Kafka (topic: <b>payments</b>) delivered via WebSocket.</p>
+
+        <div class="feed" id="feed"></div>
+
+        <div class="feedFooter">
+          <span class="muted">Tip:</span>
+          <span class="muted">If no events appear, check the WS badge and the token.</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="/ui-customer/app.js"></script>
+</body>
+</html>
