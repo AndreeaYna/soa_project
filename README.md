@@ -80,12 +80,10 @@ Implementation
 - Technology: Node.js + Express
 - Endpoint: POST /fraud-check
 - Input:
-
     {
       "amount": 150
     }
 - Output:
-
     {
       "score": 0.9
     }
@@ -132,13 +130,13 @@ Each microservice runs independently and can be started separately.
 
 Example:
 
-cd services/api-orders
-npm install
-node index.js
+- cd services/api-orders
+- npm install
+- node index.js
 
 The API Gateway is accessible at:
 
-http://localhost:8080
+- http://localhost:8080
 
 10. Conclusion
 
