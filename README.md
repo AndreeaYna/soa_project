@@ -1,10 +1,11 @@
-📦 Subscription Hub – Microservices Demo
-1. Overview
+# **Subscription Hub – Microservices Demo**
+
+## 1. Overview
 
 Subscription Hub is a microservices-based web application that demonstrates modern distributed system concepts such as asynchronous communication, event streaming, real-time notifications, and API security.
 The application allows users to subscribe to digital services (e.g., Spotify, Netflix, YouTube Premium). Subscription orders are processed asynchronously, payments are simulated, and confirmations are delivered in real time to the client application.
 
-2. System Architecture
+## 2. System Architecture
 
 The system follows a microservices architecture, with each service having a clearly defined responsibility. Services communicate through a combination of REST APIs, message queues, and event streaming platforms.
 
@@ -31,7 +32,7 @@ Main Components
   - Stateless function that evaluates payment risk
   - Invoked during order processing
 
-3. Communication Patterns
+## 3. Communication Patterns
 
 The system uses multiple communication patterns to ensure scalability and loose coupling.
 
@@ -47,7 +48,7 @@ RabbitMQ (Message Broker)
 
 This approach ensures that order creation is not blocked by payment processing.
 
-4. Event Streaming with Kafka
+## 4. Event Streaming with Kafka
 
 Kafka is used for event-based communication within the system.
 
@@ -57,7 +58,7 @@ Kafka is used for event-based communication within the system.
 
 Kafka is particularly suited for broadcasting state changes across services.
 
-5. Real-Time Notifications
+## 5. Real-Time Notifications
 
 To deliver instant feedback to users, the system implements server-side notifications using WebSockets.
 
@@ -67,7 +68,7 @@ To deliver instant feedback to users, the system implements server-side notifica
 
 This improves user experience and demonstrates scalable real-time communication.
 
-6. Fraud Detection as a Function-as-a-Service (FaaS)
+## 6. Fraud Detection as a Function-as-a-Service (FaaS)
 
 The system includes a Fraud Detection Function-as-a-Service (FaaS) used to simulate basic fraud analysis during the order creation process.
 This service is implemented as a lightweight, stateless HTTP service and is consumed programmatically by the Orders microservice.
@@ -80,10 +81,12 @@ Implementation
 - Technology: Node.js + Express
 - Endpoint: POST /fraud-check
 - Input:
-    {
+  ```json 
+     {
       "amount": 150
-    }
+     } 
 - Output:
+  ```json
     {
       "score": 0.9
     }
@@ -101,7 +104,7 @@ This component follows the Function-as-a-Service model:
 
 The service does not render a web page. It is designed to be consumed internally via HTTP calls.
 
-7. Technologies Used
+## 7. Technologies Used
 Backend
 - Node.js
 - Express.js
@@ -116,15 +119,16 @@ Frontend
 - Micro-frontend structure (separate UI modules for users and admins)
 
 Infrastructure
-- Nginx (API Gateway & load balancing)
+- Nginx (Reverse Proxy, static content delivery, request forwarding)
+- Node.js API Gateway (JWT validation and routing)
 
-8. Security
+## 8. Security
 
 - All protected endpoints require a valid JWT token
 - Role-based access control is applied (admin vs. user)
 - Sensitive operations (e.g., order deletion) are restricted to administrators
 
-9. Running the Project
+## 9. Running the Project
 
 Each microservice runs independently and can be started separately.
 
@@ -138,7 +142,11 @@ The API Gateway is accessible at:
 
 - http://localhost:8080
 
-10. Conclusion
+The frontend and API are accessed via Nginx at:
+
+- http://localhost:8081
+
+## 10. Conclusion
 
 Subscription Hub demonstrates key distributed system concepts including asynchronous processing, event-driven architecture, real-time communication, and service isolation.
 The project serves as a practical example of building scalable and modular backend systems using modern web technologies.
